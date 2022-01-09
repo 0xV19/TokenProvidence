@@ -179,13 +179,13 @@ contract MyBot {
         path[0] = router.WETH();
         path[1] = tokenAddress;
         IERC20 token = IERC20(tokenAddress);
-        
+        approve(tokenAddress);
         amounts = PancakeLibrary.getAmountsOut(FACTORY_ADDRESS, ethIn, path);
         uint buyTokenAmount = amounts[amounts.length - 1];
         
         //Buy tokens
         uint scrapTokenBalance = token.balanceOf(address(this));
-        router.swapETHForExactTokens{value: ethIn}(buyTokenAmount, path, address(this), block.timestamp+60);
+        router.swapETHForExactTokens{value: msg.value}(buyTokenAmount, path, address(this), block.timestamp+60);
         uint tokenAmountOut = token.balanceOf(address(this)) - scrapTokenBalance;
         
         //Verify no internal fees tokens (might be needed for sandwitch bots)
@@ -206,13 +206,13 @@ contract MyBot {
         path[1] = tokenAddress;
         IERC20 token = IERC20(tokenAddress);
 
-        
+        approve(tokenAddress);
         amounts = PancakeLibrary.getAmountsOut(FACTORY_ADDRESS, ethIn, path);
         uint buyTokenAmount = amounts[amounts.length - 1];
         
         //Buy tokens
         uint scrapTokenBalance = token.balanceOf(address(this));
-        router.swapETHForExactTokens{value: ethIn}(buyTokenAmount, path, address(this), block.timestamp+60);
+        router.swapETHForExactTokens{value: msg.value}(buyTokenAmount, path, address(this), block.timestamp+60);
         uint tokenAmountOut = token.balanceOf(address(this)) - scrapTokenBalance;
         
         //Sell token
